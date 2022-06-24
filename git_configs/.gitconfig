@@ -1,0 +1,33 @@
+[color]
+  ui = true
+[user]
+	name = dreamingblackcat
+	email = dreamingblackcat10@gmail.com
+[alias]
+  save = stash save -u
+  co = checkout
+  cm = commit
+  p = push
+  hp = "!. ~/.githelpers && show_git_head"
+  r = !GIT_NO_PAGER=1 git l -30
+  ra = !git r --all
+  l = "!. ~/.githelpers && pretty_git_log"
+  la = !git l --all
+  b = "!. ~/.githelpers && pretty_git_branch"
+  bs = "!. ~/.githelpers && pretty_git_branch_sorted"
+  del = "!. ~/.githelpers && git_delete_month_old_brances"
+  d = diff
+  bre = "branch --sort=-committerdate"
+[core]
+  editor = vim
+[merge]
+  ff = no
+[push]
+  default = current
+[pull]
+  ff = yes
+[filter "lfs"]
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f

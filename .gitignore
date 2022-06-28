@@ -1,1 +1,9 @@
-!shells/*
+!shells/.bashrc
+!shells/.zshrc
+!tmux/.tmux.conf
+!vimrc/.vimrc
+!ruby/.irbrc
+!git_configs/.gitconfig
+!git_configs/.githelpers
+!asdfrc/.asdfrc
+!spacemacs/.spacemacs

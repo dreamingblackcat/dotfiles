@@ -9,7 +9,7 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="/Users/chan/.oh-my-zsh"
+export ZSH="$HOME/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -223,27 +223,11 @@ export PATH="/usr/local/opt/imagemagick@6/bin:$PATH"
 ## Iterm2 shell intergration script
 # source ~/.iterm2_shell_integration.zsh
 
-export PATH="$PATH:$HOME/Library/Python/3.7/bin"
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/Users/chan/opt/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/Users/chan/opt/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "/Users/chan/opt/anaconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/Users/chan/opt/anaconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
-source activate thingaha
-
-source ~/.githubtoken.sh
+[ -f "$HOME/.conda_shell_init.sh" ] && source "$HOME/.conda_shell_init.sh" # github auth token for gh cli
+[ -f "$HOME/.githubtoken.sh" ] && source "$HOME/.githubtoken.sh" # github auth token for gh cli
 
 # Add haskell environment to path
-[ -f "/Users/chan/.ghcup/env" ] && source "/Users/chan/.ghcup/env" # ghcup-env
+[ -f "$HOME/.ghcup/env" ] && source "$HOME/.ghcup/env" # ghcup-env
 
 alias gcc="/usr/local/bin/gcc-4.9"
 ulimit -S -n 10240
@@ -263,7 +247,7 @@ export PATH="$PATH:$HOME/.cargo/bin"
 
 # Resolving confliciting awscli clients
 # Thingaha aws
-alias taws="/Users/chan/opt/anaconda3/envs/thingaha/bin/aws"
+alias taws="$HOME/opt/anaconda3/envs/thingaha/bin/aws"
 
 # Workcloud aws
 alias waws="/usr/local/bin/aws"

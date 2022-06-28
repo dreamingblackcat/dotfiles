@@ -267,7 +267,3 @@ alias taws="/Users/chan/opt/anaconda3/envs/thingaha/bin/aws"
 
 # Workcloud aws
 alias waws="/usr/local/bin/aws"
-
-# TIG monitoring stack
-# Telegraf - InfluxDB - Graphana
-# InfluxDB token for Telegraf

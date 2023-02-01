@@ -143,6 +143,9 @@ if [[ $TERM == xterm ]]; then TERM=xterm-256color; fi
 # Solargraph gem config for vscode ruby langauge server
 export SOLARGRAPH_GLOBAL_CONFIG="$HOME/.solargraph.yml"
 
+# Workcloud specific content that I've customized into shell.
+[ -f "$HOME/.workcloud_config.sh" ] && source "$HOME/.workcloud_config.sh"
+
 ### Ascender Aliases
 function push {
   revised=$(ruby -e "puts \"`git log -1 --pretty=%B`\".chomp  + ' [ci skip]'")
@@ -245,9 +248,4 @@ export PATH="$PATH:$HOME/.rvm/bin"
 # for rust programming language
 export PATH="$PATH:$HOME/.cargo/bin"
 
-# Resolving confliciting awscli clients
-# Thingaha aws
-alias taws="$HOME/opt/anaconda3/envs/thingaha/bin/aws"
-
-# Workcloud aws
-alias waws="/usr/local/bin/aws"
+eval "$(direnv hook zsh)"

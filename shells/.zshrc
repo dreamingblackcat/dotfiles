@@ -163,7 +163,7 @@ function rubocop_diff_with_stable() {
 
 function rsd(){
   echo "Starting rails server..."
-  USE_S3=true USE_DELAYED_JOB=true BULLET=false bundle exec rails server $1
+  USE_S3=true USE_DELAYED_JOB=true BULLET=false bundle exec rails server $1 $2
 }
 
 function recent_git_branches() {

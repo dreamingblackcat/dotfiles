@@ -5,11 +5,11 @@ $zsh_custom = ENV['ZSH_CUSTOM'] || "#{$home}/.oh-my-zsh/custom"
 def install_unless_dir_exists(dir, package, &block)
   puts "#{package} already installed" and return if Dir.exist?(dir)
 
-  #if block_given?
-  #  yield
-  #else
-  #  puts "Replace me with actual #{package} installation command"
-  #end
+  if block_given?
+    yield
+  else
+    puts "Replace me with actual #{package} installation command"
+  end
 end
 
 puts "Starting installation."
@@ -25,6 +25,10 @@ install_unless_dir_exists("#{$zsh_custom}/plugins/zsh-syntax-highlighting", "zsh
   `git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/plugins/zsh-syntax-highlighting`
 end
 #[oh-my-zsh] plugin 'zprofile' not found
+install_unless_dir_exists("#{$zsh_custom}/plugins/zprofile", "zprofile") do
+  puts "Installing zprofile"
+  `git clone https://github.com/qoomon/zprofile.git #{$zsh_custom}/plugins/zprofile`
+end
 
 #[oh-my-zsh] plugin 'iterm-tab-color' not found
 install_unless_dir_exists("#{$zsh_custom}/plugins/iterm-tab-color", "iterm-tab-color") do

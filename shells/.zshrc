@@ -232,6 +232,12 @@ export PATH="/usr/local/opt/imagemagick@6/bin:$PATH"
 # Add haskell environment to path
 [ -f "$HOME/.ghcup/env" ] && source "$HOME/.ghcup/env" # ghcup-env
 
+
+if ! type "$zoxide" > /dev/null; then
+  # install foobar here
+  alias z="zoxide"
+fi
+
 alias gcc="/usr/local/bin/gcc-4.9"
 ulimit -S -n 10240
 
@@ -243,9 +249,11 @@ echo "Ctrl + L – clear the terminal."
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
+[ -f "$HOME/.rvm/scripts/rvm" ] && source "$HOME/.rvm/scripts/rvm"
 
 # Add rustup toolchains to path
 # for rust programming language
 export PATH="$PATH:$HOME/.cargo/bin"
+export PATH="$PATH:$HOME/.local/bin"
 
 eval "$(direnv hook zsh)"

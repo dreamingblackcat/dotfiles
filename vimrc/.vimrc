@@ -70,6 +70,7 @@ set smartindent	" Enable smart-indent
 set smarttab	" Enable smart-tabs
 set softtabstop=2	" Number of spaces per Tab
 set relativenumber 
+set term=xterm-256color
 
 " Advanced
 set ruler	" Show row and column ruler information

@@ -79,7 +79,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Add wisely, as too many plugins slow down shell startup.
 
 # FOR VSCODE zsh plugin
-VSCODE=code-insiders
+VSCODE=code
 
 plugins=(
   git
@@ -133,7 +133,7 @@ fi
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 # My Personal aliases
 alias reload!="source ~/.zshrc"
-alias code="/usr/local/bin/code-insiders"
+# alias code="/usr/local/bin/code-insiders"
 alias c="clear"
 
 export EDITOR='vim'
@@ -145,6 +145,9 @@ export SOLARGRAPH_GLOBAL_CONFIG="$HOME/.solargraph.yml"
 
 # Workcloud specific content that I've customized into shell.
 [ -f "$HOME/.workcloud_config.sh" ] && source "$HOME/.workcloud_config.sh"
+
+# Linux specific
+[ -f "$HOME/.chan.linuxzshrc.sh" ] && source "$HOME/.chan.linuxzshrc.sh"
 
 ### Ascender Aliases
 function push {
@@ -235,7 +238,7 @@ export PATH="/usr/local/opt/imagemagick@6/bin:$PATH"
 
 if ! type "$zoxide" > /dev/null; then
   # install foobar here
-  alias z="zoxide"
+  alias zo="zoxide"
 fi
 
 alias gcc="/usr/local/bin/gcc-4.9"
@@ -257,3 +260,10 @@ export PATH="$PATH:$HOME/.cargo/bin"
 export PATH="$PATH:$HOME/.local/bin"
 
 eval "$(direnv hook zsh)"
+
+export WORKON_HOME=~/.virtualenvs
+[ -f "$HOME/.asdf/asdf.sh" ] && source "$HOME/.asdf/asdf.sh"
+alias ci="code-insiders"
+alias z="zellij"
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

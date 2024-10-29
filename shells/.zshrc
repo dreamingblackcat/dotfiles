@@ -148,6 +148,8 @@ export SOLARGRAPH_GLOBAL_CONFIG="$HOME/.solargraph.yml"
 
 # Linux specific
 [ -f "$HOME/.chan.linuxzshrc.sh" ] && source "$HOME/.chan.linuxzshrc.sh"
+# MacOS specific
+[ -f "$HOME/.chan.macoszshrc.sh" ] && source "$HOME/.chan.macoszshrc.sh"
 
 ### Ascender Aliases
 function push {
@@ -205,20 +207,9 @@ alias dkrc="docker-compose exec -T rails-app bundle exec rails c"
 # aliases for exercism
 alias exc="exercism"
 
-# Path exports for mysql bin and lib
-export PATH="$PATH:/usr/local/mysql/bin"
-# export DYLD_LIBRARY_PATH="/usr/local/mysql/lib:$DYLD_LIBRARY_PATH" # old mysql 5.5
-export DYLD_LIBRARY_PATH="/usr/local/opt/mysql@5.7/lib:$DYLD_LIBRARY_PATH"
-export PATH="$PATH:/usr/local/opt/mysql@5.7/bin"
-
 # Exports for elixir iex
 export ERL_AFLAGS="-kernel shell_history enabled"
 
-# Exports for imagemagick 6.9
-export LDFLAGS="-L/usr/local/opt/imagemagick@6/lib"
-export CPPFLAGS="-I/usr/local/opt/imagemagick@6/include"
-export PKG_CONFIG_PATH="/usr/local/opt/imagemagick@6/lib/pkgconfig"
-export PATH="/usr/local/opt/imagemagick@6/bin:$PATH"
 
 # SSH helpers
 [ -f ~/.ssh/ssh_shell_helpers.sh ] && source ~/.ssh/ssh_shell_helpers.sh
@@ -266,4 +257,7 @@ export WORKON_HOME=~/.virtualenvs
 alias ci="code-insiders"
 alias z="zellij"
 
+if command -v exa &> /dev/null; then
+    alias ls="exa"
+fi
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

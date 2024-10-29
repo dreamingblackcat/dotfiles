@@ -1,9 +1,9 @@
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
-#if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-# source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-#fi
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+ source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
 
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
@@ -79,7 +79,12 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Add wisely, as too many plugins slow down shell startup.
 
 # FOR VSCODE zsh plugin
-VSCODE=code
+# Set VSCODE based on availability
+if command -v code-insiders &> /dev/null; then
+  export VSCODE="code-insiders"
+elif command -v code &> /dev/null; then
+  export VSCODE="code"
+fi
 
 plugins=(
   git
@@ -142,6 +147,20 @@ if [[ $TERM == xterm ]]; then TERM=xterm-256color; fi
 
 # Solargraph gem config for vscode ruby langauge server
 export SOLARGRAPH_GLOBAL_CONFIG="$HOME/.solargraph.yml"
+
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[ ! -f "$HOME/.p10k.zsh" ] && source "$HOME/.p10k.zsh"
+
+## Iterm2 shell intergration script
+# source ~/.iterm2_shell_integration.zsh
+
+[ -f "$HOME/.conda_shell_init.sh" ] && source "$HOME/.conda_shell_init.sh" # github auth token for gh cli
+[ -f "$HOME/.githubtoken.sh" ] && source "$HOME/.githubtoken.sh" # github auth token for gh cli
+
+# Add haskell environment to path
+[ -f "$HOME/.ghcup/env" ] && source "$HOME/.ghcup/env" # ghcup-env
+
 
 # Workcloud specific content that I've customized into shell.
 [ -f "$HOME/.workcloud_config.sh" ] && source "$HOME/.workcloud_config.sh"
@@ -214,19 +233,6 @@ export ERL_AFLAGS="-kernel shell_history enabled"
 # SSH helpers
 [ -f ~/.ssh/ssh_shell_helpers.sh ] && source ~/.ssh/ssh_shell_helpers.sh
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-## Iterm2 shell intergration script
-# source ~/.iterm2_shell_integration.zsh
-
-[ -f "$HOME/.conda_shell_init.sh" ] && source "$HOME/.conda_shell_init.sh" # github auth token for gh cli
-[ -f "$HOME/.githubtoken.sh" ] && source "$HOME/.githubtoken.sh" # github auth token for gh cli
-
-# Add haskell environment to path
-[ -f "$HOME/.ghcup/env" ] && source "$HOME/.ghcup/env" # ghcup-env
-
-
 if ! type "$zoxide" > /dev/null; then
   # install foobar here
   alias zo="zoxide"
@@ -235,11 +241,12 @@ fi
 alias gcc="/usr/local/bin/gcc-4.9"
 ulimit -S -n 10240
 
-echo "Ctrl + U – delete from the cursor to the start of the line."
-echo "Ctrl + K – delete from the cursor to the end of the line."
-echo "Ctrl + W – delete from the cursor to the start of the preceding word."
-echo "Alt + D – delete from the cursor to the end of the next word."
-echo "Ctrl + L – clear the terminal."
+# shell shortcuts
+#echo "Ctrl + U – delete from the cursor to the start of the line."
+#echo "Ctrl + K – delete from the cursor to the end of the line."
+#echo "Ctrl + W – delete from the cursor to the start of the preceding word."
+#echo "Alt + D – delete from the cursor to the end of the next word."
+#echo "Ctrl + L – clear the terminal."
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
@@ -261,3 +268,10 @@ if command -v exa &> /dev/null; then
     alias ls="exa"
 fi
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# https://blog.mattclemente.com/2020/06/26/oh-my-zsh-slow-to-load/
+# How to test zsh loading time
+timezsh() {
+  shell=${1-$SHELL}
+  for i in $(seq 1 10); do /usr/bin/time $shell -i -c exit; done
+}

@@ -6,9 +6,7 @@ VSCODE=code-insiders
 # InfluxDB token for influxdb.chanmyae.me to be used with mac telegraf
 export INFLUX_TOKEN=IQHfcNlaDJrFNIfFr1P0L8RElgG6tEFhrxcKYOm6MQfiSpMNegy6vv0RWKvEGihuQZHB9y1y6hHhwLI0nMp3RA==
 
-nvim="$HOME/bin/nvim-macos-arm64/bin/nvim"
-
-
+alias nvim="$HOME/bin/nvim-macos-arm64/bin/nvim"
 
 # Path exports for mysql bin and lib
 export PATH="$PATH:/usr/local/mysql/bin"

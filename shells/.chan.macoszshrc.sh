@@ -28,3 +28,6 @@ export DOCKER_HOST=unix://${HOME}/.colima/default/docker.sock
 alias mbrew=/opt/homebrew/bin/brew
 export PATH="$PATH:/opt/homebrew/bin"
 export HOMEBREW_NO_AUTO_UPDATE=1
+
+# Set up golang
+export PATH="$PATH:/usr/local/go/bin"

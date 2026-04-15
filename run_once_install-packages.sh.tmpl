@@ -1,0 +1,165 @@
+#!/bin/sh
+# run_once_install-packages.sh.tmpl
+# Installs packages based on OS. Reruns if this file content changes.
+# Template variables: .chezmoi.os, .chezmoi.arch
+
+set -e
+
+{{- if eq .chezmoi.os "darwin" }}
+# ── macOS (Homebrew) ──────────────────────────────────────────────────────────
+
+if ! command -v brew > /dev/null 2>&1; then
+    echo "Installing Homebrew..."
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+fi
+
+echo "Installing Homebrew packages..."
+
+# Core utilities
+brew install \
+    git \
+    zsh \
+    tmux \
+    neovim \
+    fzf \
+    zoxide \
+    direnv \
+    exa \
+    ripgrep \
+    asdf \
+    gh \
+    zellij
+
+# Language runtimes / version managers
+brew install \
+    rbenv \
+    pyenv \
+    nvm \
+    go \
+    rustup-init
+
+# Development tools
+brew install \
+    mysql@5.7 \
+    imagemagick@6 \
+    colima \
+    docker \
+    docker-compose
+
+# Fonts for Powerlevel10k
+brew tap homebrew/cask-fonts
+brew install --cask font-meslo-lg-nerd-font
+
+echo "Homebrew packages installed."
+
+{{- else if eq .chezmoi.os "linux" }}
+# ── Linux ─────────────────────────────────────────────────────────────────────
+
+# Detect package manager
+if command -v apt-get > /dev/null 2>&1; then
+    echo "Detected apt (Debian/Ubuntu)"
+    sudo apt-get update -qq
+
+    sudo apt-get install -y \
+        git \
+        zsh \
+        tmux \
+        curl \
+        wget \
+        unzip \
+        build-essential \
+        fzf \
+        direnv \
+        ripgrep \
+        exa \
+        gh
+
+    # Install neovim (latest) via tarball
+    NVIM_URL="https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz"
+    curl -L "$NVIM_URL" | sudo tar xz -C /opt
+    sudo ln -sf /opt/nvim-linux64/bin/nvim /usr/local/bin/nvim
+
+    # Install asdf
+    if [ ! -d "$HOME/.asdf" ]; then
+        git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.14.0
+    fi
+
+    # Install zoxide
+    curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
+
+elif command -v pacman > /dev/null 2>&1; then
+    echo "Detected pacman (Arch Linux)"
+    sudo pacman -Syu --noconfirm \
+        git \
+        zsh \
+        tmux \
+        curl \
+        wget \
+        unzip \
+        base-devel \
+        fzf \
+        direnv \
+        ripgrep \
+        exa \
+        github-cli \
+        neovim \
+        zoxide
+fi
+
+echo "Linux packages installed."
+
+{{- end }}
+
+# ── Oh My Zsh (all platforms) ─────────────────────────────────────────────────
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    echo "Installing Oh My Zsh..."
+    RUNZSH=no CHSH=no sh -c \
+        "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+fi
+
+ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
+
+# Powerlevel10k theme
+if [ ! -d "$ZSH_CUSTOM/themes/powerlevel10k" ]; then
+    echo "Installing Powerlevel10k..."
+    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git \
+        "$ZSH_CUSTOM/themes/powerlevel10k"
+fi
+
+# zsh-syntax-highlighting
+if [ ! -d "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting" ]; then
+    echo "Installing zsh-syntax-highlighting..."
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git \
+        "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
+fi
+
+# zsh-autosuggestions
+if [ ! -d "$ZSH_CUSTOM/plugins/zsh-autosuggestions" ]; then
+    echo "Installing zsh-autosuggestions..."
+    git clone https://github.com/zsh-users/zsh-autosuggestions \
+        "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
+fi
+
+# iterm-tab-color (macOS iTerm2 only)
+{{- if eq .chezmoi.os "darwin" }}
+if [ ! -d "$ZSH_CUSTOM/plugins/iterm-tab-color" ]; then
+    echo "Installing iterm-tab-color..."
+    git clone https://github.com/bernardop/iterm-tab-color-oh-my-zsh.git \
+        "$ZSH_CUSTOM/plugins/iterm-tab-color"
+fi
+{{- end }}
+
+# zprofile
+if [ ! -d "$ZSH_CUSTOM/plugins/zprofile" ]; then
+    echo "Installing zprofile..."
+    git clone https://github.com/qoomon/zprofile.git \
+        "$ZSH_CUSTOM/plugins/zprofile"
+fi
+
+# ── Tmux Plugin Manager ───────────────────────────────────────────────────────
+if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
+    echo "Installing tmux plugin manager (tpm)..."
+    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+fi
+
+echo "All packages and plugins installed successfully."

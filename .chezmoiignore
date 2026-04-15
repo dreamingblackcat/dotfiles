@@ -1,0 +1,21 @@
+# Ignore legacy stow-era files and directories
+install.sh
+install.rb
+README.md
+
+# Ignore git metadata
+.git
+
+# Ignore VS Code workspace settings (not a dotfile target)
+.vscode
+
+# Ignore stow package directories that have been migrated
+# (these no longer exist after restructure, kept as documentation)
+
+# OS-generated files
+.DS_Store
+*.swp
+*.swo
+
+# neovim lazy lock — regenerated on first launch, don't overwrite
+dot_config/nvim/lazy-lock.json

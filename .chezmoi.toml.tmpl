@@ -1,0 +1,10 @@
+{{- $name := promptStringOnce . "name" "Full name" -}}
+{{- $email := promptStringOnce . "email" "Email address" -}}
+{{- $work := promptBoolOnce . "work" "Is this a work machine" -}}
+
+[data]
+    name = {{ $name | quote }}
+    email = {{ $email | quote }}
+    work = {{ $work }}
+    os = {{ .chezmoi.os | quote }}
+    arch = {{ .chezmoi.arch | quote }}

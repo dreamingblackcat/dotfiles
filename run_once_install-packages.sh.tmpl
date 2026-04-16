@@ -68,22 +68,12 @@ if command -v apt-get > /dev/null 2>&1; then
         wget \
         unzip \
         build-essential \
+        neovim \
         fzf \
         direnv \
         ripgrep \
         eza \
         gh
-
-    # Install neovim (latest stable) via tarball
-    if ! command -v nvim > /dev/null 2>&1; then
-        NVIM_URL="https://github.com/neovim/neovim/releases/download/stable/nvim-linux64.tar.gz"
-        mkdir -p /tmp/nvim-install
-        curl -sSL "$NVIM_URL" -o /tmp/nvim-install/nvim.tar.gz
-        sudo mkdir -p /opt/nvim
-        sudo tar xzf /tmp/nvim-install/nvim.tar.gz -C /opt/nvim --strip-components=1
-        sudo ln -sf /opt/nvim/bin/nvim /usr/local/bin/nvim
-        rm -rf /tmp/nvim-install
-    fi
 
     # Install asdf
     if [ ! -d "$HOME/.asdf" ]; then

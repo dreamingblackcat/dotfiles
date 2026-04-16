@@ -316,6 +316,53 @@ Plugins installed:
 
 ---
 
+## Testing with Docker
+
+You can test the dotfiles setup in a clean Ubuntu 24.04 environment using Docker, without touching your real machine.
+
+### Prerequisites
+
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (macOS/Windows) or Docker Engine + Docker Compose (Linux)
+
+### Commands
+
+```sh
+make build       # Build the Ubuntu 24.04 test image
+make test        # Drop into an interactive shell inside the container
+make test-auto   # Run automated verification checks non-interactively
+make clean       # Remove the container image and volumes
+```
+
+### Interactive testing (`make test`)
+
+Drops you into a bash shell in the container. A welcome banner shows the two ways to apply dotfiles:
+
+```sh
+# Test with the locally bind-mounted repo (no rebuild needed for local edits):
+chezmoi init --apply --source=/home/chan/dotfiles
+
+# Test pulling directly from GitHub:
+chezmoi init --apply github.com/dreamingblackcat/dotfiles
+```
+
+### Automated verification (`make test-auto`)
+
+Runs `test/test-chezmoi.sh` non-interactively. Checks that:
+- chezmoi is installed
+- Key dotfiles exist (`~/.zshrc`, `~/.gitconfig`, `~/.tmux.conf`, `~/.p10k.zsh`, `~/.githelpers`)
+- `~/.config/nvim/` directory is present
+- `~/.ssh/config` has correct `600` permissions
+- zsh is available
+
+Exits `0` if all checks pass, `1` otherwise (suitable for CI).
+
+### Notes
+
+- The repo is bind-mounted read-only at `/home/chan/dotfiles`, so local edits are reflected inside the container immediately — no rebuild required.
+- On first run, chezmoi will prompt for your **name**, **email**, and whether this is a **work machine**. Answer the prompts to continue.
+
+---
+
 ## Credits
 
 Dotfiles structure inspired by the [chezmoi documentation](https://www.chezmoi.io/) and community best practices. Git log helpers from [Gary Bernhardt's dotfiles](https://github.com/garybernhardt/dotfiles).

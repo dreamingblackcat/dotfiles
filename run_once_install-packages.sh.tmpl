@@ -74,10 +74,16 @@ if command -v apt-get > /dev/null 2>&1; then
         eza \
         gh
 
-    # Install neovim (latest) via tarball
-    NVIM_URL="https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz"
-    curl -L "$NVIM_URL" | sudo tar xz -C /opt
-    sudo ln -sf /opt/nvim-linux64/bin/nvim /usr/local/bin/nvim
+    # Install neovim (latest stable) via tarball
+    if ! command -v nvim > /dev/null 2>&1; then
+        NVIM_URL="https://github.com/neovim/neovim/releases/download/stable/nvim-linux64.tar.gz"
+        mkdir -p /tmp/nvim-install
+        curl -sSL "$NVIM_URL" -o /tmp/nvim-install/nvim.tar.gz
+        sudo mkdir -p /opt/nvim
+        sudo tar xzf /tmp/nvim-install/nvim.tar.gz -C /opt/nvim --strip-components=1
+        sudo ln -sf /opt/nvim/bin/nvim /usr/local/bin/nvim
+        rm -rf /tmp/nvim-install
+    fi
 
     # Install asdf
     if [ ! -d "$HOME/.asdf" ]; then

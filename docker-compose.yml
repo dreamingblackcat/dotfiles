@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: docker/Dockerfile
     volumes:
-      - .:/home/chan/dotfiles:ro
+      - .:/home/chan/dotfiles
     environment:
       - CHEZMOI_SOURCE_DIR=/home/chan/dotfiles
       - GITHUB_USERNAME=dreamingblackcat

@@ -20,6 +20,12 @@ echo "  User    : $(whoami)"
 echo "  Home    : $HOME"
 echo ""
 
+# Fix permissions on mounted dotfiles directory
+if [ -d "/home/chan/dotfiles" ]; then
+    sudo chown -R chan:chan /home/chan/dotfiles
+fi
+echo ""
+
 echo -e "${YELLOW}Quick Start:${NC}"
 echo ""
 echo "  Test with LOCAL repo (mounted at /home/chan/dotfiles):"

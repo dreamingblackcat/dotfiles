@@ -11,8 +11,11 @@ RUN apt-get update && apt-get install -y \
     && locale-gen en_US.UTF-8 \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Create non-root user chan with UID 1000
-RUN useradd -m -u 1000 -s /bin/bash chan \
+# Install chezmoi
+RUN sh -c "$(curl -fsLS get.chezmoi.io)" -- -b /usr/local/bin
+
+# Create non-root user chan with passwordless sudo
+RUN useradd -m -s /bin/bash chan \
     && echo "chan ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 COPY test/entrypoint.sh /entrypoint.sh

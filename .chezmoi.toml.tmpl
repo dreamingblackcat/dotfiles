@@ -1,6 +1,19 @@
-{{- $name := promptStringOnce . "name" "Full name" -}}
-{{- $email := promptStringOnce . "email" "Email address" -}}
-{{- $work := promptBoolOnce . "work" "Is this a work machine" -}}
+{{- $name := env "CHEZMOI_NAME" -}}
+{{- if not $name -}}
+  {{- $name = promptString "Full name" -}}
+{{- end -}}
+
+{{- $email := env "CHEZMOI_EMAIL" -}}
+{{- if not $email -}}
+  {{- $email = promptString "Email address" -}}
+{{- end -}}
+
+{{- $work := env "CHEZMOI_WORK" -}}
+{{- if not $work -}}
+  {{- $work = promptBool "Is this a work machine" -}}
+{{- else -}}
+  {{- $work = eq $work "true" -}}
+{{- end -}}
 
 [data]
     name = {{ $name | quote }}

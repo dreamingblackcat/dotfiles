@@ -75,12 +75,22 @@ if command -v apt-get > /dev/null 2>&1; then
         eza \
         gh
 
-    # Install zellij (via cargo)
+    # Install zellij (pre-built binary)
     if ! command -v zellij > /dev/null 2>&1; then
         echo "Installing zellij..."
-        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --quiet
-        . "$HOME/.cargo/env"
-        cargo install zellij --quiet
+        ZELLIJ_VERSION="0.44.1"
+        ZELLIJ_ARCH="aarch64"
+        if [ "$(uname -m)" = "x86_64" ]; then
+            ZELLIJ_ARCH="x86_64"
+        fi
+        mkdir -p /tmp/zellij-install
+        curl -sL "https://github.com/zellij-org/zellij/releases/download/v${ZELLIJ_VERSION}/zellij-${ZELLIJ_ARCH}-unknown-linux-musl.tar.gz" \
+            -o /tmp/zellij-install/zellij.tar.gz
+        tar xzf /tmp/zellij-install/zellij.tar.gz -C /tmp/zellij-install/
+        sudo mkdir -p /usr/local/bin
+        sudo mv /tmp/zellij-install/zellij /usr/local/bin/zellij
+        sudo chmod +x /usr/local/bin/zellij
+        rm -rf /tmp/zellij-install
     fi
 
     # Install mise (universal version manager)
@@ -115,12 +125,22 @@ elif command -v pacman > /dev/null 2>&1; then
         neovim \
         zoxide
 
-    # Zellij is in AUR, so install from cargo if not available
+    # Zellij (pre-built binary)
     if ! command -v zellij > /dev/null 2>&1; then
-        echo "Installing zellij via cargo..."
-        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --quiet
-        . "$HOME/.cargo/env"
-        cargo install zellij --quiet
+        echo "Installing zellij..."
+        ZELLIJ_VERSION="0.44.1"
+        ZELLIJ_ARCH="aarch64"
+        if [ "$(uname -m)" = "x86_64" ]; then
+            ZELLIJ_ARCH="x86_64"
+        fi
+        mkdir -p /tmp/zellij-install
+        curl -sL "https://github.com/zellij-org/zellij/releases/download/v${ZELLIJ_VERSION}/zellij-${ZELLIJ_ARCH}-unknown-linux-musl.tar.gz" \
+            -o /tmp/zellij-install/zellij.tar.gz
+        tar xzf /tmp/zellij-install/zellij.tar.gz -C /tmp/zellij-install/
+        sudo mkdir -p /usr/local/bin
+        sudo mv /tmp/zellij-install/zellij /usr/local/bin/zellij
+        sudo chmod +x /usr/local/bin/zellij
+        rm -rf /tmp/zellij-install
     fi
 
     # Install mise (universal version manager)

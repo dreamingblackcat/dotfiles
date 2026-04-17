@@ -70,14 +70,18 @@ alias z="zellij"
 alias exc="exercism"
 alias treload!="tmux source ~/.tmux.conf"
 
-# Use exa instead of ls if available
-if command -v exa &> /dev/null; then
-    alias ls="exa"
+# Use eza instead of ls if available
+if command -v eza &> /dev/null; then
+    alias ls="eza"
 fi
 
-# Zoxide
-if ! type "$zoxide" > /dev/null; then
-  alias zo="zoxide"
+# Zoxide with custom aliases
+if command -v zoxide &> /dev/null; then
+    # Override cd with zoxide
+    alias cdo='\cd'  # Original cd command
+    eval "$(zoxide init --no-cmd zsh)"
+    alias cd='__zoxide_z'
+    alias cdi='__zoxide_zi'
 fi
 
 # ── Git Helpers ───────────────────────────────────────────────────────────────
@@ -159,19 +163,20 @@ export CPPFLAGS="-I/usr/local/opt/imagemagick@6/include"
 export PKG_CONFIG_PATH="/usr/local/opt/imagemagick@6/lib/pkgconfig"
 export PATH="/usr/local/opt/imagemagick@6/bin:$PATH"
 
-# Podman & Colima
-export PATH="$PATH:/opt/podman/bin"
+# Docker runtime configuration (based on docker_engine choice)
+{{- if eq .docker_engine "colima" }}
 export DOCKER_HOST=unix://${HOME}/.colima/default/docker.sock
+{{- else if eq .docker_engine "podman" }}
+export DOCKER_HOST=unix://${HOME}/.local/share/containers/podman/podman.sock
+{{- else if eq .docker_engine "docker-desktop" }}
+# Docker Desktop configured
+{{- end }}
 
 # Go
 export PATH="$PATH:/usr/local/go/bin"
 
-# Tailscale
-alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
+# Homebrew shortcut
 alias mbrew=/opt/homebrew/bin/brew
-
-# Neovim macOS binary
-alias nvim="$HOME/bin/nvim-macos-arm64/bin/nvim"
 
 # InfluxDB token (personal monitoring — move to secret management if needed)
 # export INFLUX_TOKEN=<your-token>
@@ -193,11 +198,14 @@ export PATH="$PATH:$HOME/.cargo/bin"
 export PATH="$PATH:$HOME/.local/bin"
 
 # ── Tool initializations ──────────────────────────────────────────────────────
-# RVM
-[ -f "$HOME/.rvm/scripts/rvm" ] && source "$HOME/.rvm/scripts/rvm"
+# mise (universal version manager)
+eval "$(mise activate zsh)"
 
-# asdf version manager
-[ -f "$HOME/.asdf/asdf.sh" ] && source "$HOME/.asdf/asdf.sh"
+# Optional: Ruby version managers (RVM, rbenv, pyenv, nvm)
+# Uncomment the source line below if you want to use alternative Ruby managers
+# This file contains RVM, rbenv, pyenv, and nvm initialization.
+# By default, mise is the primary version manager.
+# [ -f "$HOME/.ruby_managers.sh" ] && source "$HOME/.ruby_managers.sh"
 
 # direnv
 eval "$(direnv hook zsh)"

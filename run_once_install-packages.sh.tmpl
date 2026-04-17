@@ -24,27 +24,27 @@ brew install \
     fzf \
     zoxide \
     direnv \
-    exa \
+    eza \
     ripgrep \
-    asdf \
+    mise \
     gh \
     zellij
 
-# Language runtimes / version managers
+# Language runtimes
 brew install \
-    rbenv \
-    pyenv \
-    nvm \
     go \
     rustup-init
 
 # Development tools
 brew install \
     mysql@5.7 \
-    imagemagick@6 \
-    colima \
-    docker \
-    docker-compose
+    imagemagick@6
+
+# Tailscale (VPN)
+if ! command -v tailscale > /dev/null 2>&1; then
+    brew install tailscale
+    echo "Tailscale installed. Run 'tailscale up' to authenticate."
+fi
 
 # Fonts for Powerlevel10k
 brew tap homebrew/cask-fonts
@@ -73,15 +73,22 @@ if command -v apt-get > /dev/null 2>&1; then
         direnv \
         ripgrep \
         eza \
-        gh
+        gh \
+        zellij
 
-    # Install asdf
-    if [ ! -d "$HOME/.asdf" ]; then
-        git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.14.0
+    # Install mise (universal version manager)
+    if ! command -v mise > /dev/null 2>&1; then
+        curl https://mise.jdx.dev/install.sh | sh
+        ~/.local/bin/mise --version
     fi
 
     # Install zoxide
     curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
+
+    # Install Tailscale
+    if ! command -v tailscale > /dev/null 2>&1; then
+        curl -fsSL https://tailscale.com/install.sh | sh
+    fi
 
 elif command -v pacman > /dev/null 2>&1; then
     echo "Detected pacman (Arch Linux)"
@@ -99,7 +106,19 @@ elif command -v pacman > /dev/null 2>&1; then
         eza \
         github-cli \
         neovim \
-        zoxide
+        zoxide \
+        zellij
+
+    # Install mise (universal version manager)
+    if ! command -v mise > /dev/null 2>&1; then
+        curl https://mise.jdx.dev/install.sh | sh
+        ~/.local/bin/mise --version
+    fi
+
+    # Install Tailscale
+    if ! command -v tailscale > /dev/null 2>&1; then
+        curl -fsSL https://tailscale.com/install.sh | sh
+    fi
 fi
 
 echo "Linux packages installed."

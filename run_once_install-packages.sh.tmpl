@@ -73,8 +73,15 @@ if command -v apt-get > /dev/null 2>&1; then
         direnv \
         ripgrep \
         eza \
-        gh \
-        zellij
+        gh
+
+    # Install zellij (via cargo)
+    if ! command -v zellij > /dev/null 2>&1; then
+        echo "Installing zellij..."
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --quiet
+        . "$HOME/.cargo/env"
+        cargo install zellij --quiet
+    fi
 
     # Install mise (universal version manager)
     if ! command -v mise > /dev/null 2>&1; then
@@ -106,8 +113,15 @@ elif command -v pacman > /dev/null 2>&1; then
         eza \
         github-cli \
         neovim \
-        zoxide \
-        zellij
+        zoxide
+
+    # Zellij is in AUR, so install from cargo if not available
+    if ! command -v zellij > /dev/null 2>&1; then
+        echo "Installing zellij via cargo..."
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --quiet
+        . "$HOME/.cargo/env"
+        cargo install zellij --quiet
+    fi
 
     # Install mise (universal version manager)
     if ! command -v mise > /dev/null 2>&1; then

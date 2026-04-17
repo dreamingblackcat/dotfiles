@@ -1,0 +1,83 @@
+#!/bin/sh
+# run_once_install-docker-runtime.sh.tmpl
+# Installs Docker runtime based on user choice
+# Template variable: .docker_engine
+
+set -e
+
+{{- if eq .chezmoi.os "darwin" }}
+# macOS Docker runtime installation
+
+case "{{ .docker_engine }}" in
+  colima)
+    if ! command -v colima > /dev/null 2>&1; then
+      echo "Installing Colima (lightweight container runtime for macOS)..."
+      brew install colima
+      echo "Starting Colima..."
+      colima start || true
+    fi
+    ;;
+
+  podman)
+    if ! command -v podman > /dev/null 2>&1; then
+      echo "Installing Podman..."
+      brew install podman
+      echo "Initializing Podman..."
+      podman machine init || true
+      podman machine start || true
+    fi
+    ;;
+
+  docker-desktop)
+    if [ ! -d "/Applications/Docker.app" ]; then
+      echo "Installing Docker Desktop..."
+      brew install --cask docker
+      echo "⚠️  Docker Desktop installed. Please launch it from Applications manually."
+    fi
+    ;;
+
+  none)
+    echo "Skipping Docker engine installation (docker_engine = none)"
+    ;;
+
+  *)
+    echo "Unknown docker_engine: {{ .docker_engine }}"
+    exit 1
+    ;;
+esac
+
+{{- else if eq .chezmoi.os "linux" }}
+# Linux Docker runtime installation
+
+case "{{ .docker_engine }}" in
+  podman)
+    if ! command -v podman > /dev/null 2>&1; then
+      echo "Installing Podman..."
+      sudo apt-get update -qq
+      sudo apt-get install -y podman
+    fi
+    ;;
+
+  docker-desktop)
+    if ! command -v docker > /dev/null 2>&1; then
+      echo "Installing Docker Desktop via apt..."
+      sudo apt-get update -qq
+      sudo apt-get install -y docker.io docker-compose-plugin
+      sudo usermod -aG docker "$USER"
+      echo "⚠️  Docker installed. You may need to log out and back in for group changes to take effect."
+    fi
+    ;;
+
+  none)
+    echo "Skipping Docker engine installation (docker_engine = none)"
+    ;;
+
+  *)
+    echo "Unknown docker_engine: {{ .docker_engine }}"
+    exit 1
+    ;;
+esac
+
+{{- end }}
+
+echo "Docker runtime setup complete."

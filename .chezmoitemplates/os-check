@@ -1,0 +1,4 @@
+{{/* Reusable OS/arch detection fragment.
+     Include in any template with: {{ template "os-check" . }}
+     After inclusion, use .chezmoi.os / .chezmoi.arch directly. */}}
+{{- /* darwin = macOS, linux = Linux, windows = Windows */ -}}

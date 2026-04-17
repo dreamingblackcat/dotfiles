@@ -1,0 +1,35 @@
+{{- $name := env "CHEZMOI_NAME" -}}
+{{- if not $name -}}
+  {{- $name = promptString "Full name" -}}
+{{- end -}}
+
+{{- $email := env "CHEZMOI_EMAIL" -}}
+{{- if not $email -}}
+  {{- $email = promptString "Email address" -}}
+{{- end -}}
+
+{{- $work := env "CHEZMOI_WORK" -}}
+{{- if not $work -}}
+  {{- $work = promptBool "Is this a work machine" -}}
+{{- else -}}
+  {{- $work = eq $work "true" -}}
+{{- end -}}
+
+{{- $dockerEngine := env "CHEZMOI_DOCKER_ENGINE" -}}
+{{- if not $dockerEngine -}}
+  {{- if eq .chezmoi.os "darwin" -}}
+    {{- $dockerEngine = promptChoice "Docker engine (macOS)" "none" "colima" "podman" "docker-desktop" -}}
+  {{- else if eq .chezmoi.os "linux" -}}
+    {{- $dockerEngine = promptChoice "Docker engine (Linux)" "none" "podman" "docker-desktop" -}}
+  {{- else -}}
+    {{- $dockerEngine = "none" -}}
+  {{- end -}}
+{{- end -}}
+
+[data]
+    name = {{ $name | quote }}
+    email = {{ $email | quote }}
+    work = {{ $work }}
+    docker_engine = {{ $dockerEngine | quote }}
+    os = {{ .chezmoi.os | quote }}
+    arch = {{ .chezmoi.arch | quote }}

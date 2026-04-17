@@ -1,0 +1,13 @@
+services:
+  dotfiles-test:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    volumes:
+      - .:/home/chan/dotfiles
+    environment:
+      - CHEZMOI_SOURCE_DIR=/home/chan/dotfiles
+      - GITHUB_USERNAME=dreamingblackcat
+    stdin_open: true
+    tty: true
+    working_dir: /home/chan

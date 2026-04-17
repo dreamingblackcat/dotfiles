@@ -1,0 +1,20 @@
+# ~/.ssh/config — managed by chezmoi
+# This file has 600 permissions (private_dot_ssh maps to ~/.ssh)
+#
+# Template rendered for: {{ .chezmoi.username }}@{{ .chezmoi.hostname }}
+
+Host *
+  AddKeysToAgent yes
+{{- if eq .chezmoi.os "darwin" }}
+  UseKeychain yes
+{{- end }}
+  IdentityFile ~/.ssh/id_ed25519
+
+# Add your host-specific entries below, or use .chezmoitemplates/ for
+# shared fragments across machines.
+#
+# Example:
+# Host myserver
+#   HostName 192.168.1.100
+#   User ubuntu
+#   IdentityFile ~/.ssh/myserver_key

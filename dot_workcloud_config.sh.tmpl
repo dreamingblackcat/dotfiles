@@ -1,6 +1,8 @@
-# How to kill a delayed_job worker.
+{{- if .work -}}
+# ~/.workcloud_config.sh — managed by chezmoi (work machine only)
+# This file is sourced by ~/.zshrc when present.
 
-# Utility functions and aliases
+# How to kill a delayed_job worker.
 function kill_delaybed_job() {
   echo "Killing delayed_job worker...";
   ps aux | grep jobs | grep -v grep | awk '{print $2}' | xargs kill -9
@@ -34,15 +36,11 @@ function create_github_pr() {
 }
 alias ghpr=create_github_pr
 
-# Resolving confliciting awscli clients
-# Thingaha aws
+# Workcloud AWS CLI alias (separate venv)
 alias taws="$HOME/opt/anaconda3/envs/thingaha/bin/aws"
-
-# Workcloud aws
 alias waws="/usr/local/bin/aws"
-
-alias rrpr="ghpr relationship_refactoring_master_branch_WEB-23229"
 
 function release_pr(){
   ./merge_to_production.sh
 }
+{{- end }}
